@@ -8,11 +8,23 @@ namespace ProductManagementSystem.Data;
 
 public class ProductManagementContext : DbContext
 {
+    // Update when on computer with SQL not installed
+    private bool _sqlNotAvailable = true;
+
     public DbSet<Product> Product { get; set; }
     public DbSet<ProductLocation> ProductLocation { get; set; }
     public DbSet<Stock> Stock { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Data Source=localhost;Initial Catalog=ProductManagementSystem;Integrated Security=SSPI;");
+    {
+        if (_sqlNotAvailable)
+        {
+            options.UseInMemoryDatabase("ProductManagementSystem");
+        } 
+        else
+        {
+            options.UseSqlServer("Data Source=localhost;Initial Catalog=ProductManagementSystem;Integrated Security=SSPI;");
+        }
+    }
 
         
 
